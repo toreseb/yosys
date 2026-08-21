@@ -121,10 +121,24 @@ public:
 	void addStandardArgs();
 	int run(int argc, char **argv);
 	void printError(const std::string& message);
+	void printHeader(const std::string& message);
+	void printOption(const std::string& name, const std::string& desc);
 };
 
 void YosysDriver::printError(const std::string& message) {
-	log_error("%s\n", message);
+	fmt::print(stderr, fg(fmt::terminal_color::bright_red), "{}", "ERROR: ");
+	fmt::print(stderr, fg(fmt::terminal_color::blue) | fmt::emphasis::bold, "{}", message);
+	fmt::print(stderr, "\n");
+}
+
+void YosysDriver::printHeader(const std::string& message) {
+	fmt::print(stderr, fg(fmt::terminal_color::white) | fmt::emphasis::bold, "{}", message);
+	fmt::print(stderr, "\n");
+}
+void YosysDriver::printOption(const std::string& name, const std::string& desc) {
+	fmt::print(stderr, fg(fmt::terminal_color::bright_blue) | fmt::emphasis::bold, "    {:<12}", name);
+	fmt::print(stderr, "- {}", desc);
+	fmt::print(stderr, "\n");
 }
 
 int YosysDriver::run(int argc, char **argv) {
@@ -196,68 +210,77 @@ int YosysDriver::run(int argc, char **argv) {
 		return 0;
 	}
 	if (options.printLanguages) {
-		printf("Registered Languages:\n");
-		printf("    verilog   - Verilog (default)\n");
-		printf("    sv        - SystemVerilog\n");
-		printf("    vhdl      - VHDL\n");
+		printHeader("Registered Languages:");
+		printOption("verilog", "Verilog");
+		printOption("sv", "SystemVerilog");
+		//printf("    vhdl      - VHDL\n");
 		return 0;
 	}
 	if (options.printStandards) {
-		printf("Registered Standards for '%s':\n", "verilog");
-		printf("    1995      - Verilog 1364-1995\n");
-		printf("    2001      - Verilog 1364-2001\n");
-		printf("    2005      - Verilog 1364-2005\n");
+		printHeader("Registered Standards for verilog:");
+		printOption("1995", "Verilog 1364-1995");
+		printOption("2001", "Verilog 1364-2001");
+		printOption("2005", "Verilog 1364-2005");
 		//printf("    2005      - SystemVerilog 1800-2005\n");
 		//printf("    2009      - SystemVerilog 1800-2009\n");
 		//printf("    2012      - SystemVerilog 1800-2012\n");
 		//printf("    2017      - SystemVerilog 1800-2017\n");
 		//printf("    2023      - SystemVerilog 1800-2023\n");
+		return 0;
 	}
 
 	if (options.printTargets) {
-		printf("Registered Targets:\n");
-		printf("    ice40     - Lattice iCE 40\n");
-		printf("    ecp5      - Lattice ECP5\n");
+		printHeader("Registered Targets:");
+		printOption("ice40", "Lattice iCE 40");
+		printOption("ecp5", "Lattice ECP5");
 		return 0;
 	}
 
 	if (!options.target) {
-		printError("Target is not specified.");
+		printError("target is not specified.");
 		return 1;
 	}
 	if (!sourceFiles.size()) {
 		printError("no input files");
-		return 2;
+		return 1;
 	}
 	if (!options.outputFile) {
 		printError("no output file");
-		return 2;
+		return 1;
 	}
 	if (!options.topModule) {
 		printError("no top module specified");
-		return 2;
+		return 1;
 	}
 	
 	show_build_status = true;
-	run_pass("read -noverific");
+	std::vector<std::string> passes;
+
+	passes.push_back("read -noverific");
 	if (!options.defines.empty()) {
 		for (auto vdef : options.defines)
-			run_pass("read -define " + vdef);
+			passes.push_back("read -define " + vdef);
 	}
 	if (!options.undefines.empty()) {
 		for (auto vdef : options.undefines)
-			run_pass("read -undef " + vdef);
+			passes.push_back("read -undef " + vdef);
 	}
 
 	for (auto fn : sourceFiles)
-		run_frontend(fn.c_str(), "auto");
+		passes.push_back(stringf("read_verilog -sv %s", fn));
+		//run_frontend(fn.c_str(), "auto");
 
-	run_pass(stringf("hierarchy -top %s", options.topModule.value()));
+	passes.push_back(stringf("hierarchy -top %s", options.topModule.value()));
 
-	run_pass(stringf("synth_%s", options.target.value()));
+	passes.push_back(stringf("synth_%s", options.target.value()));
 
-	run_backend(options.outputFile.value(), "auto");
+	//run_backend(options.outputFile.value(), "auto");
+	passes.push_back(stringf("write_verilog %s", options.outputFile.value()));
 
+	for(auto &p : passes) {
+		fprintf(stderr, "%s\n", p.c_str());
+		run_pass(p);
+	}
 	yosys_design->check();
 	for (auto it : saved_designs)
 		it.second->check();
