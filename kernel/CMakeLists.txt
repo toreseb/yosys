@@ -197,6 +197,10 @@ if (NOT YOSYS_BUILD_PYTHON_ONLY)
 		LIBRARIES
 			fmt::fmt
 			slang::slang
+			$<${YOSYS_ENABLE_READLINE}:PkgConfig::readline>
+			$<${YOSYS_ENABLE_EDITLINE}:PkgConfig::editline>
+			$<${YOSYS_ENABLE_TCL}:PkgConfig::tcl>
+			$<${YOSYS_ENABLE_PYTHON}:Python3::Python>
 		BOOTSTRAP
 	)
 endif()
