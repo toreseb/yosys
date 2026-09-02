@@ -29,4 +29,22 @@ struct Test1Pass : public Pass {
     }
 } Test1Pass;
 
+struct CustomPass1 : public ScriptPass {
+    CustomPass1() : ScriptPass("Custom1", "Testing the pass functions") { }
+    
+    void execute(std::vector<std::string> args, RTLIL::Design *design) override
+    {
+        string run_from, run_to;
+        run_script(design,run_from,run_to);
+    }
+
+    void script() override
+    {
+        run("opt");
+    }
+
+    
+} CustomPass1;
+
+
 PRIVATE_NAMESPACE_END
