@@ -72,6 +72,7 @@
 /yosys.profdata
 /coverage
 /coverage_html
+/obj_dir/*
 
 # these really belong in global gitignore since they're not specific to this project but rather to user tool choice
 # but too many people don't have a global gitignore configured:
