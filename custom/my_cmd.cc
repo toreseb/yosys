@@ -46,5 +46,29 @@ struct CustomPass1 : public ScriptPass {
     
 } CustomPass1;
 
+struct CustomPass2 : public ScriptPass {
+    CustomPass2() : ScriptPass("Custom2", "Initial Pass for Custom Design") { }
+    
+    void execute(std::vector<std::string> args, RTLIL::Design *design) override
+    {
+        string run_from, run_to;
+        run_script(design,run_from,run_to);
+    }
+
+    void script() override
+    {
+        run("read_verilog -lib custom/maps/cells_sim.v");
+        run("proc; opt");
+        run("fsm; opt");
+        run("techmap; opt");
+        run("dfflegalize -cell $_SDFF_PP0_ 0");
+        run("abc -lut 5; opt");
+        run("techmap -map custom/maps/cells_map.v");
+        run("clean");
+        run("techmap -map custom/maps/ff_map.v"); //Changes _SDFF_PPO_ to our flip flops
+    }
+
+    
+} CustomPass2;
 
 PRIVATE_NAMESPACE_END
