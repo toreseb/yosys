@@ -60,12 +60,13 @@ struct CustomPass2 : public ScriptPass {
         run("read_verilog -lib custom/maps/cells_sim.v");
         run("proc; opt");
         run("fsm; opt");
-        run("techmap; opt");
-        run("dfflegalize -cell $_SDFF_PP0_ 0");
-        run("abc -lut 5; opt");
+        run("   ; opt");
+        run("dfflegalize -cell $_ALDFF_PN_ 0");
+        run("abc -lut 5");
         run("techmap -map custom/maps/cells_map.v");
         run("clean");
         run("techmap -map custom/maps/ff_map.v"); //Changes _SDFF_PPO_ to our flip flops
+        run("clean");
     }
 
     
