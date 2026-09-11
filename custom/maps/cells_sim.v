@@ -8,7 +8,7 @@
 endmodule*/
 
 (* blackbox *)
-module LUT5(output O, input [31:0] D, input [4:0] S);
+module LUT5(output O, input [4:0] S);
 endmodule
 
 module ALDFF(input CLK, nres, nres_prog, D, output reg O);
