@@ -8,23 +8,22 @@ module \$lut (A, Y);
 
     generate
         if (WIDTH == 1) begin
-            localparam [31:0] INIT = 32'b0;
-            LUT5 #(.INIT(LUT)) _TECHMAP_REPLACE_ (.O(Y), .I0(A[0]), .I1(1'b0), .I2(1'b0), .I3(1'b0), .I4(1'b0));
+            localparam [31:0] INIT = {16{LUT}};
+            LUT5 #(.INIT(INIT)) _TECHMAP_REPLACE_ (.O(Y), .I0(A[0]), .I1(1'b0), .I2(1'b0), .I3(1'b0), .I4(1'b0));
         end else
         if (WIDTH == 2) begin
-            localparam [31:0] INIT = 32'b0;
-            LUT5 #(.INIT(LUT)) _TECHMAP_REPLACE_ (.O(Y), .I0(A[0]), .I1(A[1]), .I2(1'b0), .I3(1'b0), .I4(1'b0));
+            localparam [31:0] INIT = {8{LUT}};
+            LUT5 #(.INIT(INIT)) _TECHMAP_REPLACE_ (.O(Y), .I0(A[0]), .I1(A[1]), .I2(1'b0), .I3(1'b0), .I4(1'b0));
         end else
         if (WIDTH == 3) begin
-            localparam [31:0] INIT = 32'b0;
-            LUT5 #(.INIT(LUT)) _TECHMAP_REPLACE_ (.O(Y), .I0(A[0]), .I1(A[1]), .I2(A[2]), .I3(1'b0), .I4(1'b0));
+            localparam [31:0] INIT = {4{LUT}};
+            LUT5 #(.INIT(INIT)) _TECHMAP_REPLACE_ (.O(Y), .I0(A[0]), .I1(A[1]), .I2(A[2]), .I3(1'b0), .I4(1'b0));
         end else
         if (WIDTH == 4) begin
-            localparam [31:0] INIT = 32'b0;
-            LUT5 #(.INIT(LUT)) _TECHMAP_REPLACE_ (.O(Y), .I0(A[0]), .I1(A[1]), .I2(A[2]), .I3(A[3]), .I4(1'b0));
+            localparam [31:0] INIT = {2{LUT}};
+            LUT5 #(.INIT(INIT)) _TECHMAP_REPLACE_ (.O(Y), .I0(A[0]), .I1(A[1]), .I2(A[2]), .I3(A[3]), .I4(1'b0));
         end else
         if (WIDTH == 5) begin
-            localparam [31:0] INIT = 32'b0;
             LUT5 #(.INIT(LUT)) _TECHMAP_REPLACE_ (.O(Y), .I0(A[0]), .I1(A[1]), .I2(A[2]), .I3(A[3]), .I4(A[4]));
         end else begin
             wire _TECHMAP_FAIL_ = 1;

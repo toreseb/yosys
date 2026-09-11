@@ -40,7 +40,15 @@ struct CustomPass1 : public ScriptPass {
 
     void script() override
     {
-        run("opt");
+        run("read_verilog -lib custom/maps/cells_sim.v");
+        run("proc; opt");
+        run("fsm; opt");
+        run("techmap; opt");
+        run("dfflegalize -cell $_ALDFF_PN_ 0");
+        run("opt_merge");
+        run("abc -lut 5; clean");
+        //run("techmap -map custom/maps/ff_map.v");
+        //run("techmap -map custom/maps/cells_map.v");
     }
 
     
@@ -64,8 +72,7 @@ struct CustomPass2 : public ScriptPass {
         run("dfflegalize -cell $_ALDFF_PN_ 0");
         run("opt_merge");
         run("abc -lut 5; clean");
-        run("techmap -map custom/maps/cells_map.v -map custom/maps/ff_map.v");
-        run("clean");
+        run("techmap -map custom/maps/ff_map.v -map custom/maps/cells_map.v; clean");
     }
 
     
