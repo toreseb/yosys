@@ -19,76 +19,92 @@ module counter(clk, rst, en, count);
   wire _01_;
   wire _02_;
   wire _03_;
-  (* src = "custom/counter.v:5.5-9.35|custom/maps/ff_map.v:2.13-2.14" *)
-  wire _04_;
-  (* src = "custom/counter.v:5.5-9.35|custom/maps/ff_map.v:2.11-2.12" *)
-  wire _05_;
-  (* src = "custom/counter.v:5.5-9.35|custom/maps/ff_map.v:3.12-3.13" *)
-  wire _06_;
-  (* src = "custom/counter.v:5.5-9.35|custom/maps/ff_map.v:2.15-2.16" *)
-  wire _07_;
-  (* src = "custom/counter.v:5.5-9.35|custom/maps/ff_map.v:2.13-2.14" *)
-  wire _08_;
-  (* src = "custom/counter.v:5.5-9.35|custom/maps/ff_map.v:2.11-2.12" *)
-  wire _09_;
-  (* src = "custom/counter.v:5.5-9.35|custom/maps/ff_map.v:3.12-3.13" *)
-  wire _10_;
-  (* src = "custom/counter.v:5.5-9.35|custom/maps/ff_map.v:2.15-2.16" *)
-  wire _11_;
-  (* src = "custom/counter.v:5.5-9.35|custom/maps/ff_map.v:2.13-2.14" *)
-  wire _12_;
-  (* src = "custom/counter.v:5.5-9.35|custom/maps/ff_map.v:2.11-2.12" *)
-  wire _13_;
-  (* src = "custom/counter.v:5.5-9.35|custom/maps/ff_map.v:3.12-3.13" *)
-  wire _14_;
-  (* src = "custom/counter.v:5.5-9.35|custom/maps/ff_map.v:2.15-2.16" *)
-  wire _15_;
-  (* src = "custom/counter.v:5.5-9.35|custom/maps/ff_map.v:2.13-2.14" *)
-  wire _16_;
-  (* src = "custom/counter.v:5.5-9.35|custom/maps/ff_map.v:2.11-2.12" *)
-  wire _17_;
-  (* src = "custom/counter.v:5.5-9.35|custom/maps/ff_map.v:3.12-3.13" *)
-  wire _18_;
-  (* src = "custom/counter.v:5.5-9.35|custom/maps/ff_map.v:2.15-2.16" *)
-  wire _19_;
-  assign _00_ = 16'h7f80 >> { count[2], en, count[0], count[1] };
-  assign _01_ = 8'h78 >> { count[1], en, count[0] };
-  assign _02_ = 4'h6 >> { en, count[0] };
-  assign _03_ = 32'd2147450880 >> { count[3], en, count[2], count[0], count[1] };
+  (* force_downto = 32'd1 *)
+  (* src = "custom/maps/cells_map.v:6.23-6.24" *)
+  wire [1:0] _04_;
   (* module_not_derived = 32'd1 *)
-  (* src = "custom/counter.v:5.5-9.35|custom/maps/ff_map.v:5.10-5.79" *)
-  SDFF _24_ (
+  (* src = "custom/maps/cells_map.v:28.32-28.112" *)
+  LUT5 #(
+    .INIT(32'd8323200)
+  ) _05_ (
+    .I0(en),
+    .I1(count[0]),
+    .I2(count[1]),
+    .I3(rst),
+    .I4(count[2]),
+    .O(_00_)
+  );
+  (* module_not_derived = 32'd1 *)
+  (* src = "custom/maps/cells_map.v:24.32-24.112" *)
+  LUT5 #(
+    .INIT(16'h0708)
+  ) _06_ (
+    .I0(en),
+    .I1(count[0]),
+    .I2(rst),
+    .I3(count[1]),
+    .I4(1'h0),
+    .O(_01_)
+  );
+  (* module_not_derived = 32'd1 *)
+  (* src = "custom/maps/cells_map.v:20.32-20.112" *)
+  LUT5 #(
+    .INIT(8'h14)
+  ) _07_ (
+    .I0(rst),
+    .I1(en),
+    .I2(count[0]),
+    .I3(1'h0),
+    .I4(1'h0),
+    .O(_02_)
+  );
+  (* module_not_derived = 32'd1 *)
+  (* src = "custom/maps/cells_map.v:16.32-16.112" *)
+  LUT5 #(
+    .INIT(4'h1)
+  ) _08_ (
+    .I0(_04_[0]),
+    .I1(rst),
+    .I2(1'h0),
+    .I3(1'h0),
+    .I4(1'h0),
+    .O(_03_)
+  );
+  (* module_not_derived = 32'd1 *)
+  (* src = "custom/counter.v:5.5-9.35|custom/maps/ff_map.v:5.11-5.78" *)
+  ALDFF _09_ (
     .CLK(clk),
     .D(_02_),
     .O(count[0]),
-    .nres(1'h0),
-    .nres_prog(rst)
+    .nres(1'hx),
+    .nres_prog(1'h1)
   );
   (* module_not_derived = 32'd1 *)
-  (* src = "custom/counter.v:5.5-9.35|custom/maps/ff_map.v:5.10-5.79" *)
-  SDFF _25_ (
+  (* src = "custom/counter.v:5.5-9.35|custom/maps/ff_map.v:5.11-5.78" *)
+  ALDFF _10_ (
     .CLK(clk),
     .D(_01_),
     .O(count[1]),
-    .nres(1'h0),
-    .nres_prog(rst)
+    .nres(1'hx),
+    .nres_prog(1'h1)
   );
   (* module_not_derived = 32'd1 *)
-  (* src = "custom/counter.v:5.5-9.35|custom/maps/ff_map.v:5.10-5.79" *)
-  SDFF _26_ (
+  (* src = "custom/counter.v:5.5-9.35|custom/maps/ff_map.v:5.11-5.78" *)
+  ALDFF _11_ (
     .CLK(clk),
     .D(_00_),
     .O(count[2]),
-    .nres(1'h0),
-    .nres_prog(rst)
+    .nres(1'hx),
+    .nres_prog(1'h1)
   );
   (* module_not_derived = 32'd1 *)
-  (* src = "custom/counter.v:5.5-9.35|custom/maps/ff_map.v:5.10-5.79" *)
-  SDFF _27_ (
+  (* src = "custom/counter.v:5.5-9.35|custom/maps/ff_map.v:5.11-5.78" *)
+  ALDFF _12_ (
     .CLK(clk),
     .D(_03_),
     .O(count[3]),
-    .nres(1'h0),
-    .nres_prog(rst)
+    .nres(1'hx),
+    .nres_prog(1'h1)
   );
+  assign _04_[1] = rst;
 endmodule

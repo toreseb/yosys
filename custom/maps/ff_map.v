@@ -1,7 +1,7 @@
-module \$_SDFF_PP0_ (
-    input D,C,R,
+module \$_ALDFF_PN_ (
+    input D,C,L,AD,
     output Q
 );
-    SDFF _TECHMAP_REPLACE_ (.D(D), .nres_prog(R), .nres(nres), .O(Q), .CLK(C));
+    ALDFF _TECHMAP_REPLACE_ (.D(D), .nres_prog(L), .nres(AD), .O(Q), .CLK(C));
 endmodule
 
